@@ -9,6 +9,7 @@
 #include <optional>
 
 #include "StringEx.h"
+#include <optional>
 
 class ArgumentParser {
 public:

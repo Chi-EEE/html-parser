@@ -150,10 +150,10 @@ DOM::RootNode buildDOM(const std::vector<Token> &tokens) {
             }
         }
 
+        static const std::string commentStart = "<!--",
+            commentEnd = "-->";
         switch (token.type) {
         case Token::Type::TagLike:
-            static const std::string commentStart = "<!--",
-                                     commentEnd = "-->";
             if (token.content.startsWith(commentStart) && token.content.endsWith(commentEnd)) {
                 // Comment
                 currentNode->children.push_back(std::make_shared<DOM::CommentNode>(currentNode, token.content.substr(

@@ -120,20 +120,6 @@ public:
         HTMLDocument::internelGetElementsByClassName(&domRoot, className, result);
         return result;
     }
-
-    StringEx getTitle() const {
-        std::vector<Element> titleElements = this->getElementsByTagName("title");
-        if (titleElements.empty()) return "";
-        return titleElements[0].getTextContent().trim();
-    }
-
-    StringEx getArticleContent() const {
-        StringEx result;
-        for (Element element : this->getElementsByTagName("p")) {
-            result += element.getTextContent().trim() + '\n';
-        }
-        return result.trim();
-    }
 };
 
 #endif // _MENCI_HTML_PARSER_HTMLDOCUMENT_H

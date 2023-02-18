@@ -200,7 +200,7 @@ ArgumentParser &ArgumentParser::parse() {
                 }
 
                 auto it = mapNameArgument.find(name.substr(2));
-                if (it == mapNameArgument.end()){
+                if (mapNameArgument.end().operator==(it)){
                     raiseError("Unknown option: " + name + '.');
                 }
                 arg = it->second;
@@ -213,7 +213,7 @@ ArgumentParser &ArgumentParser::parse() {
                 }
 
                 auto it = mapAliasArgument.find(name.substr(1));
-                if (it == mapAliasArgument.end()){
+                if (mapAliasArgument.end().operator==(it)){
                     raiseError("Unknown option: " + name + '.');
                 }
                 arg = it->second;

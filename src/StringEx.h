@@ -1,6 +1,7 @@
 #ifndef _MENCI_HTML_PARSER_STRINGEX_H
 #define _MENCI_HTML_PARSER_STRINGEX_H
 
+#include <sstream>
 #include <cctype>
 #include <string>
 #include <vector>
