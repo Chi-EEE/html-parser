@@ -67,7 +67,7 @@ void HTMLDocument::internelGetElementsByClassName(const DOM::NodeWithChildren *n
 
     for (const std::shared_ptr<DOM::Node> &child : node->children) {
         if (auto childElement = std::dynamic_pointer_cast<DOM::ElementNode>(child)) {
-            if (childElement->classList.count(className) != 0) {
+            if (childElement->classList.find(className) != childElement->classList.end()) {
                 result.push_back(HTMLDocument::Element(childElement));
             }
 
