@@ -96,28 +96,6 @@ HTMLDocument document("<div class="my-class">a &le; b</div><div class="my-class"
 std::vector<HTMLDocument::Element> elements = document.getElementsByClassName("my-class");
 ```
 
-### `HTMLDocument::getTitle`
-Get the page title (i.e. text inside the first `<title>` tag) of the document.
-
-```cpp
-HTMLDocument document("<title>a &le; b</title>");
-
-// StringEx HTMLDocument::getTitle()
-StringEx title = document.getTitle();
-// title = "a ≤ b"
-```
-
-### `HTMLDocument::getArticleContent`
-Get the page's article content (i.e. text inside all `<p>` tags) of the document, separated by `\n`.
-
-```cpp
-HTMLDocument document("<p>a &le; b</p><div>QAQ</div><p>qwq</p>");
-
-// StringEx HTMLDocument::getArticleContent()
-StringEx content = document.getArticleContent();
-// content = "a ≤ bqwq"
-```
-
 ## HTMLDocument::Element
 The interface to get data from a HTML element or its subtree.
 
