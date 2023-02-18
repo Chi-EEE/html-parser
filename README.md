@@ -1,6 +1,7 @@
 # HTML Parser
 # Requirements
 * C++ compiler with C++17 support
+* [Boost](https://github.com/boostorg/boost) Library
 
 # How to install
 Copy all the files inside of the `src` folder and put them into a folder inside your project.

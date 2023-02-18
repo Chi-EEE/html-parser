@@ -1,6 +1,6 @@
 #include "DOMBuilder.h"
 
-#include <regex>
+#include <boost/regex.hpp>
 
 #include "HTMLEntities.h"
 
@@ -47,12 +47,12 @@ static const char *const escapableRawTextElements[] = {
 static void parseTagOpen(const StringEx &token, StringEx &tagName, std::map<StringEx, StringEx> &attributes) {
     // Extract tag name and all attributes.
     // ^<(\S+)\s*([\S\s]*)>$
-    static const std::regex reTag(
+    static const boost::regex reTag(
         "^<(\\S+)\\s*([\\S\\s]*)>$"
     );
 
-    std::smatch match;
-    if (!std::regex_search(token.begin(), token.end(), match, reTag)) {
+    boost::match_results<std::string::const_iterator> match;
+    if (!boost::regex_search(token.begin(), token.end(), match, reTag)) {
         throw std::logic_error("Failed to apply regex on a tag open token");
     }
 
@@ -64,12 +64,12 @@ static void parseTagOpen(const StringEx &token, StringEx &tagName, std::map<Stri
     
     // Extract all attributes.
     // ([^>\s][^>\s=]*)(?:\s*=\s*(?:(?:"([\S\s]*?)")|(?:'([\S\s]*?)')|([^\s>]+)))?\s*
-    static const std::regex reAttribute(
+    static const boost::regex reAttribute(
         "([^>\\s][^>\\s=]*)(?:\\s*=\\s*(?:(?:\"([\\S\\s]*?)\")|(?:'([\\S\\s]*?)')|([^\\s>]+)))?\\s*"
     );
 
     std::string::const_iterator searchStart = attributesString.cbegin();
-    while (std::regex_search(searchStart, attributesString.cend(), match, reAttribute)) {
+    while (boost::regex_search(searchStart, attributesString.cend(), match, reAttribute)) {
         StringEx key = match[1].str(),
                  value;
         
@@ -95,10 +95,10 @@ static void parseTagOpen(const StringEx &token, StringEx &tagName, std::map<Stri
 
 static StringEx parseTagClose(const StringEx &token) {
     // Extract tag name.
-    static const std::regex reTagName("</(.+?)[\\s>]");
+    static const boost::regex reTagName("</(.+?)[\\s>]");
 
-    std::smatch match;
-    if (!std::regex_search(token.begin(), token.end(), match, reTagName)) {
+    boost::match_results<std::string::const_iterator> match;
+    if (!boost::regex_search(token.begin(), token.end(), match, reTagName)) {
         throw std::logic_error("Failed to apply regex on a tag close token");
     }
 
