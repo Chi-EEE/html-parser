@@ -1,6 +1,4 @@
 # HTML Parser
-The task of Advanced Programming class on 2019/03/28. C++ HTML parser that generates a simple DOM tree.
-
 # Requirements
 * C++ compiler with C++17 support
 * CMake (>= 3.0)
