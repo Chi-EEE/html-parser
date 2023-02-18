@@ -1,27 +1,9 @@
 # HTML Parser
 # Requirements
 * C++ compiler with C++17 support
-* CMake (>= 3.0)
 
-# Sample
-This project contain a sample that read HTML input from a file or stdin, and print the colorized DOM tree to the terminal.
-
-```bash
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release ../src
-make
-
-# Read HTML input from stdin
-./html-parser <<< '<div><a href=/qwq title="qaq">a</a> &le; b<!-- Comment --></div>'
-
-# Read HTML input from index.html
-./html-parser index.html
-```
-
-The output is like (for the first example that reads from stdin):
-
-<pre><img width="275" style="background: none; " src="output.svg"></pre>
+# How to install
+Copy all the files inside of the `src` folder and put them into a folder inside your project.
 
 # API
 Include `HTMLDocument.h`.
