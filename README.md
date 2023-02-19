@@ -57,6 +57,17 @@ StringEx textContent = document.getTextContent();
 // textContent = "a ≤ bqwq"
 ```
 
+### `HTMLDocument::getDirectTextContent`
+Get all the direct text in the document.
+
+```cpp
+HTMLDocument document("<span class="myspan"> Don't want this text </span>I want this text");
+
+// StringEx HTMLDocument::getDirectTextContent()
+StringEx directTextContent = document.getDirectTextContent();
+// directTextContent = "I want this text"
+```
+
 ### `HTMLDocument::getElementById`
 Get the element whose `id` attribute equals to a string. Return a `HTMLDocument::Element` object if found, a null `HTMLDocument::Element` object if NOT found.
 
@@ -123,6 +134,18 @@ HTMLDocument::Element element = document.getElementById("wrapper");
 // StringEx HTMLDocument::Element::getTextContent()
 StringEx textContent = element.getTextContent();
 // textContent = "a ≤ b"
+```
+
+### `HTMLDocument::getDirectTextContent`
+Get all the direct text in the element.
+
+```cpp
+HTMLDocument document("<div id="wrapper"><span class="myspan"> Don't want this text </span>I want this text</div>");
+HTMLDocument::Element element = document.getElementById("wrapper");
+
+// StringEx HTMLDocument::getDirectTextContent()
+StringEx directTextContent = element.getDirectTextContent();
+// directTextContent = "I want this text"
 ```
 
 ### `HTMLDocument::Element::getAttribute`
