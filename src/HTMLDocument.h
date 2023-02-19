@@ -86,6 +86,11 @@ public:
 			return this->node->idList;
 		}
 
+		StringEx getTagName()
+		{
+			return this->node->tagName;
+		}
+
 		operator bool() const {
 			return node != nullptr;
 		}
