@@ -108,6 +108,16 @@ HTMLDocument document("<div class="my-class">a &le; b</div><div class="my-class"
 std::vector<HTMLDocument::Element> elements = document.getElementsByClassName("my-class");
 ```
 
+### `HTMLDocument::getChildren`
+Get all child elements of the element upon which it was called. Return a `std::vector<HTMLDocument::Element>` that contains all the child elements.
+
+```cpp
+HTMLDocument document("<span>First</span><span>Second</span>");
+
+// std::vector<HTMLDocument::Element> HTMLDocument::getChildren()
+std::vector<HTMLDocument::Element> elements = document.getChildren();
+```
+
 ## HTMLDocument::Element
 The interface to get data from a HTML element or its subtree.
 
@@ -136,7 +146,7 @@ StringEx textContent = element.getTextContent();
 // textContent = "a ≤ b"
 ```
 
-### `HTMLDocument::getDirectTextContent`
+### `HTMLDocument::Element::getDirectTextContent`
 Get all the direct text in the element.
 
 ```cpp
@@ -180,4 +190,15 @@ HTMLDocument::Element element = document.getElementById("wrapper");
 
 // std::vector<HTMLDocument::Element> HTMLDocument::Element::getElementsByClassName(const StringEx &)
 std::vector<HTMLDocument::Element> elements = element.getElementsByClassName("my-class");
+```
+
+### `HTMLDocument::Element::getChildren`
+Get all child elements of the element upon which it was called. Return a `std::vector<HTMLDocument::Element>` that contains all the child elements.
+
+```cpp
+HTMLDocument document("<div id="wrapper"><span>First</span><span>Second</span></div>");
+HTMLDocument::Element element = document.getElementById("wrapper");
+
+// std::vector<HTMLDocument::Element> HTMLDocument::Element::getChildren()
+std::vector<HTMLDocument::Element> elements = element.getChildren();
 ```
