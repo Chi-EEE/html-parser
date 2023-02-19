@@ -57,7 +57,7 @@ inline void tokenize(StringEx str, const char delimiter, std::vector<StringEx>& 
 	out.push_back(str.substr(start, end - start));
 }
 
-static void parseTagOpen(const StringEx& token, StringEx& tagName, std::map<StringEx, StringEx>& attributes, std::set<StringEx>& classList) {
+static void parseTagOpen(const StringEx& token, StringEx& tagName, std::map<StringEx, StringEx>& attributes, std::set<StringEx>& classList, std::set<StringEx>& idList) {
 	// Extract tag name and all attributes.
 	// ^<(\S+)\s*([\S\s]*)>$
 	static const boost::regex reTag(
@@ -114,6 +114,17 @@ static void parseTagOpen(const StringEx& token, StringEx& tagName, std::map<Stri
 			classList.insert(classes[i]);
 		}
 		attributes.erase("class");
+	}
+	if (attributes.contains("id"))
+	{
+		std::vector<StringEx> ids;
+		tokenize(attributes["id"], ' ', ids);
+
+		for (int i = 0; i < ids.size(); i++)
+		{
+			idList.insert(ids[i]);
+		}
+		attributes.erase("id");
 	}
 }
 
@@ -192,7 +203,7 @@ DOM::RootNode buildDOM(const std::vector<Token>& tokens) {
 				if (!token.content.startsWith("</")) {
 					// Tag open.
 					std::shared_ptr<DOM::ElementNode> tag = std::make_shared<DOM::ElementNode>(currentNode);
-					parseTagOpen(token.content, tag->tagName, tag->attributes, tag->classList);
+					parseTagOpen(token.content, tag->tagName, tag->attributes, tag->classList, tag->idList);
 
 					currentNode->children.push_back(tag);
 
