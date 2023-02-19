@@ -44,16 +44,17 @@ static const char* const escapableRawTextElements[] = {
 	"title"
 };
 
-inline void tokenize(StringEx const& str, const char delim,
-	std::vector<StringEx>& out)
-{
-	// construct a stream from the string
-	std::stringstream ss(str);
 
-	std::string s;
-	while (std::getline(ss, s, delim)) {
-		out.push_back(s);
+inline void tokenize(StringEx str, const char delimiter, std::vector<StringEx>& out)
+{
+	int start = 0;
+	int end = str.find(delimiter);
+	while (end != -1) {
+		out.push_back(str.substr(start, end - start));
+		start = end + 1;
+		end = str.find(delimiter, start);
 	}
+	out.push_back(str.substr(start, end - start));
 }
 
 static void parseTagOpen(const StringEx& token, StringEx& tagName, std::map<StringEx, StringEx>& attributes, std::set<StringEx>& classList) {
