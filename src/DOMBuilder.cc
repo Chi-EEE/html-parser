@@ -269,17 +269,9 @@ DOM::RootNode buildDOM(const std::vector<Token> &tokens)
 		case Token::Type::Text:
 		{
 			// <!DOCTYPE> is lexed to some text -- since we don't support it, just ignore it.
-			// Trim left
-			std::string tokenContent(token.content);
-
-			tokenContent.erase(tokenContent.begin(), std::find_if(tokenContent.begin(), tokenContent.end(), [](unsigned char ch)
-																  { return !std::isspace(ch); }));
-			// Convert to lowercase
+			std::string tokenContent = trim(token.content);
 			tokenContent = to_lower(tokenContent);
-
-			// Check if it starts with "<!DOCTYPE"
-			bool startsWithDoctype = tokenContent.find("<!DOCTYPE", 0) == 0;
-			if (startsWithDoctype)
+			if (starts_with(tokenContent, "<!DOCTYPE"))
 			{
 				break;
 			}

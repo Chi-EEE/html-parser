@@ -5,6 +5,7 @@
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #define regex boost::regex
 #define regex_search boost::regex_search
 #define match_results boost::match_results<std::string::const_iterator>
@@ -16,7 +17,7 @@
 #define match_results std::smatch
 #endif
 
-inline std::string to_lower(std::string text)
+inline std::string to_lower(std::string &text)
 {
 #ifdef USE_BOOST
     boost::to_lower(text);
@@ -26,7 +27,7 @@ inline std::string to_lower(std::string text)
     return text;
 }
 
-inline bool starts_with(std::string text, std::string prefix)
+inline bool starts_with(const std::string &text, const std::string &prefix)
 {
 #ifdef USE_BOOST
     return boost::starts_with(text, prefix);
@@ -35,13 +36,25 @@ inline bool starts_with(std::string text, std::string prefix)
 #endif
 }
 
-inline bool ends_with(std::string text, std::string suffix)
+inline bool ends_with(const std::string &text, const std::string &suffix)
 {
 #ifdef USE_BOOST
     return boost::ends_with(text, suffix);
 #else
     return (0 == text.compare(text.length() - suffix.length(), suffix.length(), suffix));
 #endif
+}
+
+static inline std::string trim(const std::string &text)
+{
+    std::string clonedText(text);
+#ifdef USE_BOOST
+    boost::trim_left(clonedText);
+#else
+    clonedText.erase(clonedText.begin(), std::find_if(clonedText.begin(), clonedText.end(), [](unsigned char ch)
+                                                      { return !std::isspace(ch); }));
+#endif
+    return clonedText;
 }
 
 #endif // MARCOS_H
