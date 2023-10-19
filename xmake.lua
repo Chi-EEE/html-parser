@@ -10,6 +10,7 @@ target("html-parser")
 
     add_files("src/*.cc")
     add_headerfiles("include/(html-parser/*.h)")
+    add_headerfiles("src/macros.h")
     
     add_includedirs("include", {public = true})
     add_includedirs("include/html-parser")
