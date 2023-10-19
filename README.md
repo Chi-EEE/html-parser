@@ -5,7 +5,7 @@
 # How to install
 Using [XMake](https://xmake.io), run `xmake install` on the repository to install the library
 
-(Use `xmake f --boost=n` to disable installing the [Boost](https://github.com/boostorg/boost) Library)
+(Use `xmake f --boost=n` to disable installing the [Boost](https://github.com/boostorg/boost) Library beforehand)
 
 # API
 Include `html-parser/HTMLDocument.h`.
