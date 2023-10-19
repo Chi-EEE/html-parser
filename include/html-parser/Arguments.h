@@ -1,10 +1,11 @@
 #ifndef _MENCI_HTML_PARSER_ARGUMENTS_H
 #define _MENCI_HTML_PARSER_ARGUMENTS_H
 
-#include "StringEx.h"
+#include <string>
 
-struct Arguments {
-    StringEx inputFile;
+struct Arguments
+{
+    std::string inputFile;
 };
 
 Arguments parseArguments(int argc, char *argv[]);

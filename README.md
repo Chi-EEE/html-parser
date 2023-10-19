@@ -1,13 +1,14 @@
 # HTML Parser
 # Requirements
-* C++ compiler with C++17 support
-* [Boost](https://github.com/boostorg/boost) Library
+* [XMake](https://xmake.io)
 
 # How to install
-Copy all the files inside of the `src` folder and put them into a folder inside your project.
+Using [XMake](https://xmake.io) and run `xmake install` on the package
+
+(Use `xmake f --boost=n` to disable installing boost)
 
 # API
-Include `HTMLDocument.h`.
+Include `html-parser/HTMLDocument.h`.
 
 ## HTMLDocument
 The interface to parse HTML string and get data from it.
@@ -22,7 +23,7 @@ HTMLDocument document1(std::cin);
 // explicit HTMLDocument::HTMLDocument(std::istream &&)
 HTMLDocument document2(std::ifstream("index.html"));
 
-// explicit HTMLDocument::HTMLDocument(const StringEx &)
+// explicit HTMLDocument::HTMLDocument(const std::string &)
 HTMLDocument document3("<div>a &le; b</div>");
 ```
 
@@ -32,7 +33,7 @@ Parse HTML document from a new string, replacing the current if exists.
 ```cpp
 HTMLDocument document(std::cin);
 
-// void HTMLDocument::parse(const StringEx &)
+// void HTMLDocument::parse(const std::string &)
 document.parse("<div>a &le; b</div>");
 ```
 
@@ -52,8 +53,8 @@ Get all text in the document.
 ```cpp
 HTMLDocument document("<div>a &le; b</div><div>qwq</div>");
 
-// StringEx HTMLDocument::getTextContent()
-StringEx textContent = document.getTextContent();
+// std::string HTMLDocument::getTextContent()
+std::string textContent = document.getTextContent();
 // textContent = "a ≤ bqwq"
 ```
 
@@ -63,8 +64,8 @@ Get all the direct text in the document.
 ```cpp
 HTMLDocument document("<span class="myspan"> Don't want this text </span>I want this text");
 
-// StringEx HTMLDocument::getDirectTextContent()
-StringEx directTextContent = document.getDirectTextContent();
+// std::string HTMLDocument::getDirectTextContent()
+std::string directTextContent = document.getDirectTextContent();
 // directTextContent = "I want this text"
 ```
 
@@ -74,7 +75,7 @@ Get the element whose `id` attribute equals to a string. Return a `HTMLDocument:
 ```cpp
 HTMLDocument document("<div id="my-div">a &le; b</div>");
 
-// HTMLDocument::Element HTMLDocument::getElementById(const StringEx &)
+// HTMLDocument::Element HTMLDocument::getElementById(const std::string &)
 HTMLDocument::Element div = document.getElementById("my-div");
 ```
 
@@ -84,7 +85,7 @@ Get all elements whose `name` attribute equal to a string. Return a `std::vector
 ```cpp
 HTMLDocument document("<div name="my">a &le; b</div><span name="my">qwq</span>");
 
-// std::vector<HTMLDocument::Element> HTMLDocument::getElementsByName(const StringEx &)
+// std::vector<HTMLDocument::Element> HTMLDocument::getElementsByName(const std::string &)
 std::vector<HTMLDocument::Element> elements = document.getElementsByName("my");
 ```
 
@@ -94,7 +95,7 @@ Get all elements whose tag name equals to a string. Return a `std::vector<HTMLDo
 ```cpp
 HTMLDocument document("<div>a &le; b</div><div>qwq</div>");
 
-// std::vector<HTMLDocument::Element> HTMLDocument::getElementsByTagName(const StringEx &)
+// std::vector<HTMLDocument::Element> HTMLDocument::getElementsByTagName(const std::string &)
 std::vector<HTMLDocument::Element> elements = document.getElementsByTagName("div");
 ```
 
@@ -104,7 +105,7 @@ Get all elements which have a certain class. Return a `std::vector<HTMLDocument:
 ```cpp
 HTMLDocument document("<div class="my-class">a &le; b</div><div class="my-class">qwq</div>");
 
-// std::vector<HTMLDocument::Element> HTMLDocument::getElementsByClassName(const StringEx &)
+// std::vector<HTMLDocument::Element> HTMLDocument::getElementsByClassName(const std::string &)
 std::vector<HTMLDocument::Element> elements = document.getElementsByClassName("my-class");
 ```
 
@@ -141,8 +142,8 @@ Get all text in the element.
 HTMLDocument document("<div id="wrapper"><div>a &le; b</div><div>qwq</div></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
-// StringEx HTMLDocument::Element::getTextContent()
-StringEx textContent = element.getTextContent();
+// std::string HTMLDocument::Element::getTextContent()
+std::string textContent = element.getTextContent();
 // textContent = "a ≤ b"
 ```
 
@@ -153,8 +154,8 @@ Get all the direct text in the element.
 HTMLDocument document("<div id="wrapper"><span class="myspan"> Don't want this text </span>I want this text</div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
-// StringEx HTMLDocument::getDirectTextContent()
-StringEx directTextContent = element.getDirectTextContent();
+// std::string HTMLDocument::getDirectTextContent()
+std::string directTextContent = element.getDirectTextContent();
 // directTextContent = "I want this text"
 ```
 
@@ -165,8 +166,8 @@ Get a attribute with specfied name of the element. Return a empty string if not 
 HTMLDocument document("<div id="wrapper" data-url="/qwq"></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
-// StringEx HTMLDocument::Element::getAttribute(const StringEx &)
-StringEx value = element.getTextContent("data-url");
+// std::string HTMLDocument::Element::getAttribute(const std::string &)
+std::string value = element.getTextContent("data-url");
 // value = "/qwq"
 ```
 
@@ -177,7 +178,7 @@ Get all elements whose tag name equals to a string. Return a `std::vector<HTMLDo
 HTMLDocument document("<div id="wrapper"><div>a &le; b</div><div>qwq</div></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
-// std::vector<HTMLDocument::Element> HTMLDocument::Element::getElementsByTagName(const StringEx &)
+// std::vector<HTMLDocument::Element> HTMLDocument::Element::getElementsByTagName(const std::string &)
 std::vector<HTMLDocument::Element> elements = element.getElementsByTagName("div");
 ```
 
@@ -188,7 +189,7 @@ Get all elements which have a certain class. Return a `std::vector<HTMLDocument:
 HTMLDocument document("<div id="wrapper"><div class="my-class">a &le; b</div><div class="my-class">qwq</div></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
-// std::vector<HTMLDocument::Element> HTMLDocument::Element::getElementsByClassName(const StringEx &)
+// std::vector<HTMLDocument::Element> HTMLDocument::Element::getElementsByClassName(const std::string &)
 std::vector<HTMLDocument::Element> elements = element.getElementsByClassName("my-class");
 ```
 

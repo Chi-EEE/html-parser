@@ -4,159 +4,184 @@
 #include <istream>
 #include <memory>
 #include <type_traits>
+#include <string>
+
+#include "macros.h"
 
 #include "Lexer.h"
 #include "DOM.h"
 #include "DOMBuilder.h"
 #include "DOMInspector.h"
-#include "StringEx.h"
 
-class HTMLDocument {
+class HTMLDocument
+{
 	DOM::RootNode domRoot;
 
 public:
-	class Element {
+	class Element
+	{
 		friend class HTMLDocument;
 
 		const std::shared_ptr<DOM::ElementNode> node;
-		
-		void checkNotNull() const {
-			if (node == nullptr) {
+
+		void checkNotNull() const
+		{
+			if (node == nullptr)
+			{
 				throw std::invalid_argument("Element is null");
 			}
 		}
+
 	public:
 		Element() = default;
-		Element(const Element&) = default;
-		Element(Element&&) = default;
+		Element(const Element &) = default;
+		Element(Element &&) = default;
 		explicit Element(const std::shared_ptr<DOM::ElementNode> node) : node(node) {}
 
-		void inspect() const {
+		void inspect() const
+		{
 			checkNotNull();
 			inspectNode(node.get());
 		}
 
-		StringEx getTextContent() const {
+		std::string getTextContent() const
+		{
 			checkNotNull();
-			StringEx result;
+			std::string result;
 			HTMLDocument::internelGetTextContent(node.get(), result);
 			return result;
 		}
 
-		StringEx getDirectTextContent() const {
+		std::string getDirectTextContent() const
+		{
 			checkNotNull();
-			StringEx result;
+			std::string result;
 			HTMLDocument::internelGetDirectTextContent(node.get(), result);
 			return result;
 		}
 
-		StringEx getAttribute(const StringEx& name) const {
+		std::string getAttribute(const std::string &name) const
+		{
 			checkNotNull();
 			return HTMLDocument::internelGetAttribute(node.get(), name);
 		}
 
-		std::vector<Element> getElementsByTagName(const StringEx& tagName) const {
+		std::vector<Element> getElementsByTagName(const std::string &tagName) const
+		{
 			checkNotNull();
 			std::vector<Element> result;
 			HTMLDocument::internelGetElementsByTagName(node.get(), tagName, result);
 			return result;
 		}
 
-		std::vector<Element> getElementsByClassName(const StringEx& className) const {
+		std::vector<Element> getElementsByClassName(const std::string &className) const
+		{
 			checkNotNull();
 			std::vector<Element> result;
 			HTMLDocument::internelGetElementsByClassName(node.get(), className, result);
 			return result;
 		}
 
-		std::vector<Element> getChildren() const {
+		std::vector<Element> getChildren() const
+		{
 			checkNotNull();
 			std::vector<Element> result;
 			HTMLDocument::internelGetChildren(node.get(), result);
 			return result;
 		}
 
-		std::set<StringEx> getClassList()
+		std::unordered_set<std::string> getClassList()
 		{
 			return this->node->classList;
 		}
 
-		std::set<StringEx> getIdList()
+		std::unordered_set<std::string> getIdList()
 		{
 			return this->node->idList;
 		}
 
-		StringEx getTagName()
+		std::string getTagName()
 		{
 			return this->node->tagName;
 		}
 
-		operator bool() const {
+		operator bool() const
+		{
 			return node != nullptr;
 		}
 	};
 
 private:
-	static Element internelGetElementById(const DOM::NodeWithChildren* node, const StringEx& id);
-	static void internelGetElementsByName(const DOM::NodeWithChildren* node, const StringEx& name, std::vector<Element>& result);
-	static void internelGetElementsByTagName(const DOM::NodeWithChildren* node, const StringEx& tagName, std::vector<Element>& result);
-	static void internelGetElementsByClassName(const DOM::NodeWithChildren* node, const StringEx& className, std::vector<Element>& result);
-	static void internelGetTextContent(const DOM::NodeWithChildren* node, StringEx& result);
-	static void internelGetDirectTextContent(const DOM::NodeWithChildren* node, StringEx& result);
-	static void internelGetChildren(const DOM::NodeWithChildren* node, std::vector<Element>& result);
-	static StringEx internelGetAttribute(const DOM::ElementNode* node, const StringEx& name);
+	static Element internelGetElementById(const DOM::NodeWithChildren *node, const std::string &id);
+	static void internelGetElementsByName(const DOM::NodeWithChildren *node, const std::string &name, std::vector<Element> &result);
+	static void internelGetElementsByTagName(const DOM::NodeWithChildren *node, const std::string &tagName, std::vector<Element> &result);
+	static void internelGetElementsByClassName(const DOM::NodeWithChildren *node, const std::string &className, std::vector<Element> &result);
+	static void internelGetTextContent(const DOM::NodeWithChildren *node, std::string &result);
+	static void internelGetDirectTextContent(const DOM::NodeWithChildren *node, std::string &result);
+	static void internelGetChildren(const DOM::NodeWithChildren *node, std::vector<Element> &result);
+	static std::string internelGetAttribute(const DOM::ElementNode *node, const std::string &name);
 
 public:
 	template <typename T, typename = std::enable_if_t<std::is_base_of_v<std::istream, std::remove_reference_t<T>>>>
-	explicit HTMLDocument(T&& is) : HTMLDocument(StringEx(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>())) {}
+	explicit HTMLDocument(T &&is) : HTMLDocument(std::string(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>())) {}
 
-	explicit HTMLDocument(const StringEx& html) {
+	explicit HTMLDocument(const std::string &html)
+	{
 		parse(html);
 	}
 
-	void parse(const StringEx& html) {
+	void parse(const std::string &html)
+	{
 		domRoot = buildDOM(getTokens(html));
 	}
 
-	void inspect() const {
+	void inspect() const
+	{
 		inspectNode(&domRoot);
 	}
 
-	StringEx getTextContent() const {
-		StringEx result;
+	std::string getTextContent() const
+	{
+		std::string result;
 		HTMLDocument::internelGetTextContent(&domRoot, result);
 		return result;
 	}
 
-	StringEx getDirectTextContent() const {
-		StringEx result;
+	std::string getDirectTextContent() const
+	{
+		std::string result;
 		HTMLDocument::internelGetDirectTextContent(&domRoot, result);
 		return result;
 	}
 
-	Element getElementById(const StringEx& id) const {
+	Element getElementById(const std::string &id) const
+	{
 		return HTMLDocument::internelGetElementById(&domRoot, id);
 	}
 
-	std::vector<Element> getElementsByName(const StringEx& name) const {
+	std::vector<Element> getElementsByName(const std::string &name) const
+	{
 		std::vector<Element> result;
 		HTMLDocument::internelGetElementsByName(&domRoot, name, result);
 		return result;
 	}
 
-	std::vector<Element> getElementsByTagName(const StringEx& tagName) const {
+	std::vector<Element> getElementsByTagName(const std::string &tagName) const
+	{
 		std::vector<Element> result;
 		HTMLDocument::internelGetElementsByTagName(&domRoot, tagName, result);
 		return result;
 	}
 
-	std::vector<Element> getElementsByClassName(const StringEx& className) const {
+	std::vector<Element> getElementsByClassName(const std::string &className) const
+	{
 		std::vector<Element> result;
 		HTMLDocument::internelGetElementsByClassName(&domRoot, className, result);
 		return result;
 	}
 
-	std::vector<Element> getChildren() const {
+	std::vector<Element> getChildren() const
+	{
 		std::vector<Element> result;
 		HTMLDocument::internelGetChildren(&domRoot, result);
 		return result;

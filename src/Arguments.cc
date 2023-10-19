@@ -3,7 +3,8 @@
 #include "Arguments.h"
 #include "ArgumentParser.h"
 
-Arguments parseArguments(int argc, char *argv[]) {
+Arguments parseArguments(int argc, char *argv[])
+{
     Arguments arguments;
     ArgumentParser(argc, argv)
         .setProgramDescription("Parse HTML file to DOM tree.")

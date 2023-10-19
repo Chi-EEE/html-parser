@@ -2,7 +2,7 @@
 #define _MENCI_HTML_PARSER_DOMINSPECTOR_H
 
 #include "DOM.h"
-#include "StringEx.h"
+#include <string>
 
 void inspectNode(const DOM::Node *node, size_t indentLevel = 0);
 

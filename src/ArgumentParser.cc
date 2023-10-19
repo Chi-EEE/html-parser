@@ -1,26 +1,31 @@
 #include "ArgumentParser.h"
 
-ArgumentParser &ArgumentParser::setProgramDescription(const StringEx &programDescription) {
+ArgumentParser &ArgumentParser::setProgramDescription(const std::string &programDescription)
+{
     this->programDescription = programDescription;
     return *this;
 }
 
-ArgumentParser &ArgumentParser::addOption(const StringEx &name,
-                                          const StringEx &alias,
-                                          const StringEx &valueName,
-                                          const StringEx &description,
+ArgumentParser &ArgumentParser::addOption(const std::string &name,
+                                          const std::string &alias,
+                                          const std::string &valueName,
+                                          const std::string &description,
                                           ParserFunction parserFunction,
                                           bool optional,
-                                          const StringEx &defaultValue) {
-    if (mapNameArgument.count(name) > 0) {
+                                          const std::string &defaultValue)
+{
+    if (mapNameArgument.count(name) > 0)
+    {
         throw std::logic_error("Duplicated argument name: " + name);
     }
 
-    if (mapAliasArgument.count(alias) > 0) {
+    if (mapAliasArgument.count(alias) > 0)
+    {
         throw std::logic_error("Duplicated argument alias: " + alias);
     }
 
-    if (!optional && valueName.length() == 0) {
+    if (!optional && valueName.length() == 0)
+    {
         throw std::logic_error("Non-optional option must receive a value: --" + name);
     }
 
@@ -35,7 +40,8 @@ ArgumentParser &ArgumentParser::addOption(const StringEx &name,
     arg->defaultValue = defaultValue;
 
     mapNameArgument[name] = arg;
-    if (alias.length() > 0) {
+    if (alias.length() > 0)
+    {
         mapAliasArgument[alias] = arg;
     }
     options.push_back(arg);
@@ -43,12 +49,14 @@ ArgumentParser &ArgumentParser::addOption(const StringEx &name,
     return *this;
 }
 
-ArgumentParser &ArgumentParser::addPositional(const StringEx &valueName,
-                                              const StringEx &description,
+ArgumentParser &ArgumentParser::addPositional(const std::string &valueName,
+                                              const std::string &description,
                                               ParserFunction parserFunction,
                                               bool optional,
-                                              const StringEx &defaultValue) {
-    if (!positionalArguments.empty() && positionalArguments.back().optional && !optional) {
+                                              const std::string &defaultValue)
+{
+    if (!positionalArguments.empty() && positionalArguments.back().optional && !optional)
+    {
         throw std::logic_error("Non-optional positional argument after optional is not allowed: " + valueName);
     }
 
@@ -65,26 +73,33 @@ ArgumentParser &ArgumentParser::addPositional(const StringEx &valueName,
     return *this;
 }
 
-ArgumentParser &ArgumentParser::showHelp() {
+ArgumentParser &ArgumentParser::showHelp()
+{
     // Print a line like '  --help       Show this help message.'.
-    auto printArgumentDescription = [](const StringEx &argument, const StringEx &description, const StringEx &defaultValue = "") {
+    auto printArgumentDescription = [](const std::string &argument, const std::string &description, const std::string &defaultValue = "")
+    {
         const size_t argumentNameLength = 40;
         const size_t lineLimit = 150;
 
         std::clog << "  " << argument;
         // Pad to argumentNameLength characters.
-        if (argumentNameLength > argument.length() - 2) {
+        if (argumentNameLength > argument.length() - 2)
+        {
             size_t spaceCount = argumentNameLength - argument.length() - 2;
-            std::clog << StringEx(spaceCount, ' ');
+            std::clog << std::string(spaceCount, ' ');
         }
 
         std::clog << description;
 
-        if (defaultValue.length() > 0) {
-            if (argumentNameLength + description.length() + defaultValue.length() > lineLimit) {
+        if (defaultValue.length() > 0)
+        {
+            if (argumentNameLength + description.length() + defaultValue.length() > lineLimit)
+            {
                 std::clog << std::endl
-                          << StringEx(argumentNameLength, ' ') << "Default: " << defaultValue;
-            } else {
+                          << std::string(argumentNameLength, ' ') << "Default: " << defaultValue;
+            }
+            else
+            {
                 std::clog << " (Default: " << defaultValue << ')';
             }
         }
@@ -93,21 +108,26 @@ ArgumentParser &ArgumentParser::showHelp() {
     };
 
     // Generate a string like '[-o <file>]'.
-    auto displayOptionUsage = [](const Argument &arg) -> StringEx {
-        StringEx str = arg.alias.length() > 0 ? '-' + arg.alias
-                                              : "--" + arg.name;
-        if (arg.valueName.length() > 0) str += arg.alias.length() > 0 ? " <" + arg.valueName + '>'
-                                                                      : "=<" + arg.valueName + '>';
-        if (arg.optional) str = '[' + str + ']';
+    auto displayOptionUsage = [](const Argument &arg) -> std::string
+    {
+        std::string str = arg.alias.length() > 0 ? '-' + arg.alias
+                                                 : "--" + arg.name;
+        if (arg.valueName.length() > 0)
+            str += arg.alias.length() > 0 ? " <" + arg.valueName + '>'
+                                          : "=<" + arg.valueName + '>';
+        if (arg.optional)
+            str = '[' + str + ']';
         return str;
     };
 
     // Begin usage.
     std::clog << "Usage: " << argv[0];
-    for (std::shared_ptr<Argument> arg : options) {
+    for (std::shared_ptr<Argument> arg : options)
+    {
         std::clog << ' ' << displayOptionUsage(*arg);
     }
-    for (Argument &arg : positionalArguments) {
+    for (Argument &arg : positionalArguments)
+    {
         std::clog << " <" << arg.valueName << '>';
     }
     std::clog << std::endl;
@@ -123,21 +143,27 @@ ArgumentParser &ArgumentParser::showHelp() {
 
     // Begin positional arguments's description.
     std::clog << "Positional arguments:" << std::endl;
-    for (Argument &arg : positionalArguments) {
+    for (Argument &arg : positionalArguments)
+    {
         printArgumentDescription('<' + arg.valueName + '>', arg.description, arg.defaultValue);
     }
     std::clog << std::endl;
     // End positional arguments's description.
 
     // Generate a string like '-o, --output=<file>'.
-    auto displayOptionName = [](const Argument &arg) -> StringEx {
-        StringEx str;
-        if (arg.alias.length() > 0) {
+    auto displayOptionName = [](const Argument &arg) -> std::string
+    {
+        std::string str;
+        if (arg.alias.length() > 0)
+        {
             str += '-' + arg.alias + ", "; // 4 characters.
-        } else str += "    ";
+        }
+        else
+            str += "    ";
 
         str += "--" + arg.name;
-        if (arg.valueName.length() > 0) {
+        if (arg.valueName.length() > 0)
+        {
             str += "=<" + arg.valueName + '>';
         }
 
@@ -147,7 +173,8 @@ ArgumentParser &ArgumentParser::showHelp() {
     std::clog << "Options:" << std::endl;
     printArgumentDescription("-?, --help",
                              "Show this help message and exit.");
-    for (std::shared_ptr<Argument> arg : options) {
+    for (std::shared_ptr<Argument> arg : options)
+    {
         printArgumentDescription(displayOptionName(*arg),
                                  arg->description,
                                  arg->valueName.length() > 0 ? arg->defaultValue : "");
@@ -156,8 +183,10 @@ ArgumentParser &ArgumentParser::showHelp() {
     return *this;
 }
 
-ArgumentParser &ArgumentParser::parse() {
-    auto raiseError = [&](const StringEx &message) {
+ArgumentParser &ArgumentParser::parse()
+{
+    auto raiseError = [&](const std::string &message)
+    {
         std::clog << message << std::endl;
         std::clog << "Try '" << argv[0] << " -?' for more information." << std::endl;
         exit(2); // USAGE
@@ -166,21 +195,25 @@ ArgumentParser &ArgumentParser::parse() {
     // Skip any string like option (starts with "-") after a "--".
     bool skipAnyLikeOption = false;
     size_t positionalIndex = 0;
-    for (size_t i = 1; i < argc; i++) {
-        const StringEx curr = argv[i];
+    for (size_t i = 1; i < argc; i++)
+    {
+        const std::string curr = argv[i];
 
         std::shared_ptr<Argument> arg;
-        StringEx name;
+        std::string name;
 
-        if (curr.startsWith("-") && curr.length() > 1 && !skipAnyLikeOption) {
-            if (curr == "--") {
+        if (starts_with(curr, "-") && curr.length() > 1 && !skipAnyLikeOption)
+        {
+            if (curr == "--")
+            {
                 // Skip all later arguments like option.
                 skipAnyLikeOption = true;
                 continue;
             }
 
             // Check if calling help.
-            if (StringEx(argv[i]) == "--help" || StringEx(argv[i]) == "-?") {
+            if (std::string(argv[i]) == "--help" || std::string(argv[i]) == "-?")
+            {
                 showHelp();
                 exit(0);
             }
@@ -189,71 +222,88 @@ ArgumentParser &ArgumentParser::parse() {
             // Both "--option value" and "--option=value" is allowed.
             // Both "-ovalue" and "-o value" is allowed.
             bool valueGot = false;
-            StringEx value;
-            if (curr.startsWith("--")) {
+            std::string value;
+            if (starts_with(curr, "--"))
+            {
                 size_t equalSignPos = curr.find('=');
-                name = equalSignPos == StringEx::npos ? curr : curr.substr(0, equalSignPos);
-                if (equalSignPos != StringEx::npos) {
+                name = equalSignPos == std::string::npos ? curr : curr.substr(0, equalSignPos);
+                if (equalSignPos != std::string::npos)
+                {
                     // Value passed with "--option=value".
                     value = curr.substr(equalSignPos + 1);
                     valueGot = true;
                 }
 
                 auto it = mapNameArgument.find(name.substr(2));
-                if (mapNameArgument.end().operator==(it)){
+                if (mapNameArgument.end().operator==(it))
+                {
                     raiseError("Unknown option: " + name + '.');
                 }
                 arg = it->second;
-            } else {
+            }
+            else
+            {
                 name = curr.length() == 2 ? curr : curr.substr(0, 2);
-                if (curr.length() > 2) {
+                if (curr.length() > 2)
+                {
                     // Value passed with "-ovalue".
                     value = curr.substr(2);
                     valueGot = true;
                 }
 
                 auto it = mapAliasArgument.find(name.substr(1));
-                if (mapAliasArgument.end().operator==(it)){
+                if (mapAliasArgument.end().operator==(it))
+                {
                     raiseError("Unknown option: " + name + '.');
                 }
                 arg = it->second;
             }
 
             arg->specfied = true;
-            if (arg->valueName.length() == 0) {
+            if (arg->valueName.length() == 0)
+            {
                 // Only option, no value.
                 continue;
             }
 
             // Get value.
-            if (!valueGot) {
+            if (!valueGot)
+            {
                 // Value passed with "--option value" or "-o value".
-                if (i + 1 >= argc) {
+                if (i + 1 >= argc)
+                {
                     raiseError("Missing value for option: " + name);
                 }
 
                 value = argv[++i];
             }
 
-            if (arg->parserFunction) {
-                std::optional<StringEx> errorMessage = arg->parserFunction(value);
-                if (errorMessage) {
+            if (arg->parserFunction)
+            {
+                std::optional<std::string> errorMessage = arg->parserFunction(value);
+                if (errorMessage)
+                {
                     raiseError("Invalid value \"" + value + "\" for option " + name + ": " + *errorMessage);
                 }
             }
-        } else {
+        }
+        else
+        {
             // Positional argument.
-            if (positionalIndex == positionalArguments.size()) {
+            if (positionalIndex == positionalArguments.size())
+            {
                 raiseError("Too many arguments: \"" + curr + "\" is extra.");
             }
 
             Argument &arg = positionalArguments[positionalIndex++];
-            
+
             arg.specfied = true;
 
-            if (arg.parserFunction) {
-                std::optional<StringEx> errorMessage = arg.parserFunction(curr);
-                if (errorMessage) {
+            if (arg.parserFunction)
+            {
+                std::optional<std::string> errorMessage = arg.parserFunction(curr);
+                if (errorMessage)
+                {
                     raiseError("Invalid value \"" + curr + "\" for positional argument <" + arg.valueName + ">: " + *errorMessage);
                 }
             }
@@ -261,23 +311,34 @@ ArgumentParser &ArgumentParser::parse() {
     }
 
     // argv processed, use default value for non-specfied.
-    auto useDefaultValueForUnspecfied = [&](Argument &arg, bool isOption) {
-        if (!arg.specfied) {
-            if (!arg.optional) {
-                if (isOption) {
+    auto useDefaultValueForUnspecfied = [&](Argument &arg, bool isOption)
+    {
+        if (!arg.specfied)
+        {
+            if (!arg.optional)
+            {
+                if (isOption)
+                {
                     raiseError("Missing value for non-optional option: --" + arg.name + ".");
-                } else {
+                }
+                else
+                {
                     raiseError("Missing value for non-optional positional argument: <" + arg.valueName + ">.");
                 }
             }
 
-            const StringEx &value = arg.defaultValue;
-            if (arg.parserFunction) {
-                std::optional<StringEx> errorMessage = arg.parserFunction(value);
-                if (errorMessage) {
-                    if (isOption) {
+            const std::string &value = arg.defaultValue;
+            if (arg.parserFunction)
+            {
+                std::optional<std::string> errorMessage = arg.parserFunction(value);
+                if (errorMessage)
+                {
+                    if (isOption)
+                    {
                         raiseError("Invalid default value \"" + value + "\" for option --" + arg.name + " <" + arg.valueName + ">: " + *errorMessage);
-                    } else {
+                    }
+                    else
+                    {
                         raiseError("Invalid default value \"" + value + "\" for positional argument <" + arg.valueName + ">: " + *errorMessage);
                     }
                 }
@@ -285,11 +346,13 @@ ArgumentParser &ArgumentParser::parse() {
         }
     };
 
-    for (Argument &arg : positionalArguments) {
+    for (Argument &arg : positionalArguments)
+    {
         useDefaultValueForUnspecfied(arg, false);
     }
 
-    for (std::shared_ptr<Argument> &arg : options) {
+    for (std::shared_ptr<Argument> &arg : options)
+    {
         useDefaultValueForUnspecfied(*arg, true);
     }
 
