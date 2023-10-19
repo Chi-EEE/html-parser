@@ -17,14 +17,15 @@
 #define match_results std::smatch
 #endif
 
-inline std::string to_lower(std::string &text)
+inline std::string to_lower(const std::string &text)
 {
+    std::string clonedText(text);
 #ifdef USE_BOOST
-    boost::to_lower(text);
+    boost::to_lower(clonedText);
 #else
-    std::transform(text.begin(), text.end(), text.begin(), ::tolower);
+    std::transform(clonedText.begin(), clonedText.end(), clonedText.begin(), ::tolower);
 #endif
-    return text;
+    return clonedText;
 }
 
 inline bool starts_with(const std::string &text, const std::string &prefix)
