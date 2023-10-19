@@ -5,7 +5,7 @@ if has_config("boost") then
 end
 
 target("html-parser")
-    set_kind("shared")
+    set_kind("$(kind)")
     set_languages("cxx17")
 
     add_files("src/*.cc")
