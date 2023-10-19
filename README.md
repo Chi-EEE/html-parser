@@ -3,7 +3,7 @@
 * [XMake](https://xmake.io)
 
 # How to install
-Using [XMake](https://xmake.io) and run `xmake install` on the package
+Using [XMake](https://xmake.io), run `xmake install` on the repository to install the library
 
 (Use `xmake f --boost=n` to disable installing boost)
 
