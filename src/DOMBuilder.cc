@@ -139,7 +139,6 @@ static std::string parseTagClose(const std::string &token)
 	}
 
 	std::string tagName = match[1].str();
-
 	tagName = to_lower(tagName);
 	return tagName;
 }

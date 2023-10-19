@@ -136,8 +136,7 @@ void HTMLDocument::internelGetDirectTextContent(const DOM::NodeWithChildren *nod
 
 std::string HTMLDocument::internelGetAttribute(const DOM::ElementNode *node, const std::string &name)
 {
-	std::string clonedName(name);
-	clonedName = to_lower(clonedName);
+	std::string clonedName = to_lower(name);
 	std::unordered_map<std::string, std::string>::const_iterator it = node->attributes.find(clonedName);
 	if (it == node->attributes.end())
 		return "";
