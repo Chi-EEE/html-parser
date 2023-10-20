@@ -13,7 +13,7 @@ target("html-parser")
     add_headerfiles("src/macros.h")
     
     add_includedirs("include", {public = true})
-    add_includedirs("include/html-parser")
+    add_includedirs("include/html-parser", {public = false})
 
     if has_config("boost") then
         add_packages("boost")
