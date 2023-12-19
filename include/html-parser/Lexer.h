@@ -7,6 +7,8 @@
 
 #include "Token.h"
 
-std::vector<Token> getTokens(const std::string &htmlContents);
+namespace html_parser {
+	std::vector<Token> getTokens(const std::string& htmlContents);
+}
 
 #endif // _MENCI_HTML_PARSER_LEXER_H

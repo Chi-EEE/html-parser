@@ -3,17 +3,19 @@
 
 #include <string>
 
-struct Token
-{
-    enum Type
+namespace html_parser {
+    struct Token
     {
-        TagLike,
-        Text
-    } type;
+        enum Type
+        {
+            TagLike,
+            Text
+        } type;
 
-    std::string content;
+        std::string content;
 
-    Token(Type type, std::string content) : type(type), content(content) {}
-};
+        Token(Type type, std::string content) : type(type), content(content) {}
+    };
+}
 
 #endif // _MENCI_HTML_PARSER_TOKEN_H

@@ -17,6 +17,8 @@ The interface to parse HTML string and get data from it.
 Construct a `HTMLDocument` object from a `std::istream` or string.
 
 ```cpp
+using namespace html_parser;
+
 // explicit HTMLDocument::HTMLDocument(std::istream &)
 HTMLDocument document1(std::cin);
 
@@ -31,6 +33,8 @@ HTMLDocument document3("<div>a &le; b</div>");
 Parse HTML document from a new string, replacing the current if exists.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document(std::cin);
 
 // void HTMLDocument::parse(const std::string &)
@@ -41,6 +45,8 @@ document.parse("<div>a &le; b</div>");
 Print the colorized DOM tree of HTML document to the terminal.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div>a &le; b</div>");
 
 // void HTMLDocument::inspect()
@@ -51,6 +57,8 @@ document.inspect();
 Get all text in the document.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div>a &le; b</div><div>qwq</div>");
 
 // std::string HTMLDocument::getTextContent()
@@ -62,6 +70,8 @@ std::string textContent = document.getTextContent();
 Get all the direct text in the document.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<span class='myspan'> Don't want this text </span>I want this text");
 
 // std::string HTMLDocument::getDirectTextContent()
@@ -73,6 +83,8 @@ std::string directTextContent = document.getDirectTextContent();
 Get the element whose `id` attribute equals to a string. Return a `HTMLDocument::Element` object if found, a null `HTMLDocument::Element` object if NOT found.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div id='my-div'>a &le; b</div>");
 
 // HTMLDocument::Element HTMLDocument::getElementById(const std::string &)
@@ -83,6 +95,8 @@ HTMLDocument::Element div = document.getElementById("my-div");
 Get all elements whose `name` attribute equal to a string. Return a `std::vector<HTMLDocument::Element>` that contains all matching elements.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div name='my'>a &le; b</div><span name='my'>qwq</span>");
 
 // std::vector<HTMLDocument::Element> HTMLDocument::getElementsByName(const std::string &)
@@ -93,6 +107,8 @@ std::vector<HTMLDocument::Element> elements = document.getElementsByName("my");
 Get all elements whose tag name equals to a string. Return a `std::vector<HTMLDocument::Element>` that contains all matching elements.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div>a &le; b</div><div>qwq</div>");
 
 // std::vector<HTMLDocument::Element> HTMLDocument::getElementsByTagName(const std::string &)
@@ -103,6 +119,8 @@ std::vector<HTMLDocument::Element> elements = document.getElementsByTagName("div
 Get all elements which have a certain class. Return a `std::vector<HTMLDocument::Element>` that contains all matching elements.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div class='my-class'>a &le; b</div><div class='my-class'>qwq</div>");
 
 // std::vector<HTMLDocument::Element> HTMLDocument::getElementsByClassName(const std::string &)
@@ -113,6 +131,8 @@ std::vector<HTMLDocument::Element> elements = document.getElementsByClassName("m
 Get all child elements of the element upon which it was called. Return a `std::vector<HTMLDocument::Element>` that contains all the child elements.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<span>First</span><span>Second</span>");
 
 // std::vector<HTMLDocument::Element> HTMLDocument::getChildren()
@@ -128,6 +148,8 @@ The default constructor constructs a empty element, on which you do any operatio
 Print the colorized DOM tree of this element to the terminal.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div id='wrapper'><div>a &le; b</div></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
@@ -139,6 +161,8 @@ element.inspect();
 Get all text in the element.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div id='wrapper'><div>a &le; b</div><div>qwq</div></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
@@ -151,6 +175,8 @@ std::string textContent = element.getTextContent();
 Get all the direct text in the element.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div id='wrapper'><span class='myspan'> Don't want this text </span>I want this text</div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
@@ -163,6 +189,8 @@ std::string directTextContent = element.getDirectTextContent();
 Get a attribute with specfied name of the element. Return a empty string if not found.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div id='wrapper' data-url='/qwq'></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
@@ -175,6 +203,8 @@ std::string value = element.getTextContent("data-url");
 Get all elements whose tag name equals to a string. Return a `std::vector<HTMLDocument::Element>` that contains all matching elements.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div id='wrapper'><div>a &le; b</div><div>qwq</div></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
@@ -186,6 +216,8 @@ std::vector<HTMLDocument::Element> elements = element.getElementsByTagName("div"
 Get all elements which have a certain class. Return a `std::vector<HTMLDocument::Element>` that contains all matching elements.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div id='wrapper'><div class='my-class'>a &le; b</div><div class='my-class'>qwq</div></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 
@@ -197,6 +229,8 @@ std::vector<HTMLDocument::Element> elements = element.getElementsByClassName("my
 Get all child elements of the element upon which it was called. Return a `std::vector<HTMLDocument::Element>` that contains all the child elements.
 
 ```cpp
+using namespace html_parser;
+
 HTMLDocument document("<div id='wrapper'><span>First</span><span>Second</span></div>");
 HTMLDocument::Element element = document.getElementById("wrapper");
 

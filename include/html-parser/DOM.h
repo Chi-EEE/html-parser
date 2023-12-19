@@ -8,55 +8,57 @@
 
 #include <string>
 
-namespace DOM
-{
-
-    struct Node
+namespace html_parser {
+    namespace DOM
     {
-        struct NodeWithChildren *parentNode;
 
-        Node(struct NodeWithChildren *parentNode) : parentNode(parentNode) {}
+        struct Node
+        {
+            struct NodeWithChildren* parentNode;
 
-        // A class without virtual table can't be dymanic_cast-ed.
-        virtual ~Node() {}
-    };
+            Node(struct NodeWithChildren* parentNode) : parentNode(parentNode) {}
 
-    struct NodeWithChildren : Node
-    {
-        NodeWithChildren(NodeWithChildren *parentNode) : Node(parentNode) {}
+            // A class without virtual table can't be dymanic_cast-ed.
+            virtual ~Node() {}
+        };
 
-        std::vector<std::shared_ptr<Node>> children;
-    };
+        struct NodeWithChildren : Node
+        {
+            NodeWithChildren(NodeWithChildren* parentNode) : Node(parentNode) {}
 
-    struct RootNode : NodeWithChildren
-    {
-        RootNode() : NodeWithChildren(nullptr) {}
-    };
+            std::vector<std::shared_ptr<Node>> children;
+        };
 
-    struct ElementNode : NodeWithChildren
-    {
-        ElementNode(NodeWithChildren *parentNode) : NodeWithChildren(parentNode) {}
+        struct RootNode : NodeWithChildren
+        {
+            RootNode() : NodeWithChildren(nullptr) {}
+        };
 
-        std::string tagName;
-        std::unordered_map<std::string, std::string> attributes;
-        std::unordered_set<std::string> classList;
-        std::unordered_set<std::string> idList;
-    };
+        struct ElementNode : NodeWithChildren
+        {
+            ElementNode(NodeWithChildren* parentNode) : NodeWithChildren(parentNode) {}
 
-    struct TextNode : Node
-    {
-        std::string content;
+            std::string tagName;
+            std::unordered_map<std::string, std::string> attributes;
+            std::unordered_set<std::string> classList;
+            std::unordered_set<std::string> idList;
+        };
 
-        TextNode(NodeWithChildren *parentNode, const std::string &content) : Node(parentNode), content(content) {}
-    };
+        struct TextNode : Node
+        {
+            std::string content;
 
-    struct CommentNode : Node
-    {
-        std::string content;
+            TextNode(NodeWithChildren* parentNode, const std::string& content) : Node(parentNode), content(content) {}
+        };
 
-        CommentNode(NodeWithChildren *parentNode, const std::string &content) : Node(parentNode), content(content) {}
-    };
+        struct CommentNode : Node
+        {
+            std::string content;
 
+            CommentNode(NodeWithChildren* parentNode, const std::string& content) : Node(parentNode), content(content) {}
+        };
+
+    }
 }
 
 #endif // _MENCI_HTML_PARSER_DOM_H
